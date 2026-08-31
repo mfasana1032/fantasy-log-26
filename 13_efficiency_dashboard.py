@@ -160,12 +160,16 @@ th.tm{text-align:left} td.avgc{text-align:center;padding:0}
 .list td{padding:8px 10px}
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-2px}
+.ver{font-size:10px;letter-spacing:.08em;background:#141414;color:#fff;padding:3px 9px;border-radius:20px;vertical-align:5px;font-weight:700}
+.jsfail{background:#FBE9EC;border:1px solid #C8102E;color:#8E0D22;padding:12px 14px;border-radius:8px;font-size:13px;margin-bottom:16px;font-family:monospace;white-space:pre-wrap}
 .priv{font-size:11px;color:var(--warn);border:1px dashed var(--warn);border-radius:6px;padding:8px 11px;margin-bottom:14px;background:#FDF9F3}
 </style></head><body><div class="wrap">
 
 <div class="eyebrow">Fairfield Dynasty · Commissioner Only</div>
-<h1>Lineup Efficiency Tracker</h1>
+<h1>Lineup Efficiency Tracker <span class="ver">BUILD v2 · TWO-VIEW</span></h1>
 <div class="sub" id="sub"></div>
+<noscript><div class="jsfail">JavaScript is disabled — this page cannot render without it.</div></noscript>
+<div class="jsfail" id="jsfail" style="display:none"></div>
 
 <div class="modes">
   <div class="mode on" data-m="week">This Week</div>
@@ -216,6 +220,7 @@ th.tm{text-align:left} td.avgc{text-align:center;padding:0}
 <script>
 const D = __PAYLOAD__;
 const fmt = v => v.toFixed(1);
+function boot(){
 
 document.getElementById('sub').textContent =
   `${D.recs.length} team-weeks · ${D.seasons.length} seasons · generated ${D.generated}`;
@@ -331,6 +336,12 @@ function list(el, arr, cls){
 }
 list('viol', D.violations, 'bad');
 list('rev',  D.review,  'warn');
+}
+try { boot(); } catch (e) {
+  var box = document.getElementById('jsfail');
+  box.style.display = 'block';
+  box.textContent = 'Dashboard failed to render:\n' + (e && e.stack ? e.stack : e);
+}
 </script></body></html>
 """
 
