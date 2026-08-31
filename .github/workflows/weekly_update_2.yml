@@ -1,0 +1,59 @@
+name: Weekly Efficiency Tracker Update
+
+on:
+  schedule:
+    - cron: '0 12 * * 2'   # every Tuesday, 12:00 UTC -- same schedule as the main site
+  workflow_dispatch: {}     # lets you trigger it manually from the Actions tab anytime
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Fetch league data (Sleeper)
+        run: python 01_fetch_league_data.py
+
+      - name: Fetch real league history (Sleeper)
+        run: python 03_fetch_league_history.py
+
+      - name: Build lineup efficiency data
+        run: python 05_lineup_efficiency.py
+
+      - name: Build efficiency dashboard
+        run: python 13_efficiency_dashboard.py
+
+      - name: Prepare site folder
+        run: |
+          mkdir -p site
+          cp data/efficiency_dashboard.html site/index.html
+
+      - name: Upload site as Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Publish to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
