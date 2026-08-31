@@ -166,7 +166,7 @@ th.tm{text-align:left} td.avgc{text-align:center;padding:0}
 </style></head><body><div class="wrap">
 
 <div class="eyebrow">Fairfield Dynasty · Commissioner Only</div>
-<h1>Lineup Efficiency Tracker <span class="ver">BUILD v2 · TWO-VIEW</span></h1>
+<h1>Lineup Efficiency Tracker</h1>
 <div class="sub" id="sub"></div>
 <noscript><div class="jsfail">JavaScript is disabled — this page cannot render without it.</div></noscript>
 <div class="jsfail" id="jsfail" style="display:none"></div>
