@@ -2,13 +2,14 @@ name: Weekly Efficiency Tracker Update
 
 on:
   schedule:
-    - cron: '0 12 * * 2'   # every Tuesday, 12:00 UTC -- same schedule as the main site
+    - cron: '37 11 * * 2'   # every Tuesday, 12:00 UTC -- same schedule as the main site
   workflow_dispatch: {}     # lets you trigger it manually from the Actions tab anytime
 
 permissions:
   contents: read
   pages: write
   id-token: write
+  actions: write
 
 concurrency:
   group: "pages"
@@ -57,3 +58,7 @@ jobs:
       - name: Publish to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Keep schedule alive
+        run: gh api -X PUT repos/${{ github.repository }}/actions/workflows/weekly_update_2.yml/enable
+        env:
+          GH_TOKEN: ${{ github.token }}
